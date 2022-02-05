@@ -23,7 +23,7 @@ class Token:
   def __repr__(self):
     return "Token(%s, %s)" % (self.type, self.value)
 
-def tokenize(code: str):
+def tokenize(code):
   tokens = []
   while len(code) > 0:
     char = code[0]
@@ -125,7 +125,7 @@ def parse(tokens):
     tokens = tokens[1:]
     fn_name = tokens[0].value
     tokens = tokens[1:]
-    params: list[Node] = []
+    params = []
     while tokens[0].type != TokenType.RCURLY:
       (tokens, param) = parse(tokens)
       params.append(param)
