@@ -10,7 +10,7 @@ LPAREN = 1
 RPAREN = 2
 LCURLY = 3
 RCURLY = 4
-NUMBER = 5
+NUMBER = 0
 IDENT = 6
 OPERATOR = 7
 
@@ -88,7 +88,7 @@ def get_num(code):
   return (out, code)
 
 # Parser
-NUMBER = 1
+NUMBER = 0
 VARIABLE = 2
 EXPR = 3
 CALL = 4
