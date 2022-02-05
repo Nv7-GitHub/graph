@@ -1,4 +1,3 @@
-from enum import Enum
 import math
 
 
@@ -6,14 +5,14 @@ import math
 letters = set(list("abcdefghijklmnopqrstuvwxyz"))
 numbers = set(list("0123456789."))
 
-class TokenType(Enum):
-  LPAREN = 1
-  RPAREN = 2
-  LCURLY = 3
-  RCURLY = 4
-  NUMBER = 5
-  IDENT = 6
-  OPERATOR = 7
+
+LPAREN = 1
+RPAREN = 2
+LCURLY = 3
+RCURLY = 4
+NUMBER = 5
+IDENT = 6
+OPERATOR = 7
 
 class Token:
   def __init__(self, type, value):
@@ -28,43 +27,43 @@ def tokenize(code):
   while len(code) > 0:
     char = code[0]
     if char == "(":
-      tokens.append(Token(TokenType.LPAREN, "("))
+      tokens.append(Token(LPAREN, "("))
       code = code[1:]
     elif char == ")":
-      tokens.append(Token(TokenType.RPAREN, ")"))
+      tokens.append(Token(RPAREN, ")"))
       code = code[1:]
     elif char == "{":
-      tokens.append(Token(TokenType.LCURLY, "{"))
+      tokens.append(Token(LCURLY, "{"))
       code = code[1:]
     elif char == "}":
-      tokens.append(Token(TokenType.RCURLY, "}"))
+      tokens.append(Token(RCURLY, "}"))
       code = code[1:]
     elif char == "+":
-      tokens.append(Token(TokenType.OPERATOR, "+"))
+      tokens.append(Token(OPERATOR, "+"))
       code = code[1:]
     elif char == "-":
-      tokens.append(Token(TokenType.OPERATOR, "-"))
+      tokens.append(Token(OPERATOR, "-"))
       code = code[1:]
     elif char == "*":
-      tokens.append(Token(TokenType.OPERATOR, "*"))
+      tokens.append(Token(OPERATOR, "*"))
       code = code[1:]
     elif char == "/":
-      tokens.append(Token(TokenType.OPERATOR, "/"))
+      tokens.append(Token(OPERATOR, "/"))
       code = code[1:]
     elif char == "=":
-      tokens.append(Token(TokenType.OPERATOR, "="))
+      tokens.append(Token(OPERATOR, "="))
       code = code[1:]
     elif char == "^":
-      tokens.append(Token(TokenType.OPERATOR, "^"))
+      tokens.append(Token(OPERATOR, "^"))
       code = code[1:]
     elif char == " ":
       code = code[1:]
     elif char in letters:
       ident, code = get_ident(code)
-      tokens.append(Token(TokenType.IDENT, ident))
+      tokens.append(Token(IDENT, ident))
     elif char in numbers:
       (num, code) = get_num(code)
-      tokens.append(Token(TokenType.NUMBER, num))
+      tokens.append(Token(NUMBER, num))
     else:
       raise SyntaxError("unknown character: " + char)
 
@@ -89,11 +88,10 @@ def get_num(code):
   return (out, code)
 
 # Parser
-class NodeType(Enum):
-  NUMBER = 1
-  VARIABLE = 2
-  EXPR = 3
-  CALL = 4
+NUMBER = 1
+VARIABLE = 2
+EXPR = 3
+CALL = 4
 
 class Node:
   def __init__(self, type, value):
@@ -105,32 +103,32 @@ class Node:
 
 def parse(tokens):
   tok = tokens[0]
-  if tok.type == TokenType.IDENT:
-    return tokens[1:], Node(NodeType.VARIABLE, tok.value)
+  if tok.type == IDENT:
+    return tokens[1:], Node(VARIABLE, tok.value)
 
-  elif tok.type == TokenType.NUMBER:
-    return tokens[1:], Node(NodeType.NUMBER, float(tok.value))
+  elif tok.type == NUMBER:
+    return tokens[1:], Node(NUMBER, float(tok.value))
 
-  elif tok.type == TokenType.LPAREN:
+  elif tok.type == LPAREN:
     (tokens, val) = parse(tokens[1:])
     tok = tokens[0]
-    while tok.type != TokenType.RPAREN:
+    while tok.type != RPAREN:
       op = tok.value
       (tokens, right) = parse(tokens[1:])
-      val = Node(NodeType.EXPR, (op, val, right))
+      val = Node(EXPR, (op, val, right))
       tok = tokens[0]
     return tokens[1:], val
 
-  elif tok.type == TokenType.LCURLY:
+  elif tok.type == LCURLY:
     tokens = tokens[1:]
     fn_name = tokens[0].value
     tokens = tokens[1:]
     params = []
-    while tokens[0].type != TokenType.RCURLY:
+    while tokens[0].type != RCURLY:
       (tokens, param) = parse(tokens)
       params.append(param)
     tokens = tokens[1:]
-    return (tokens, Node(NodeType.CALL, (fn_name, params)))
+    return (tokens, Node(CALL, (fn_name, params)))
 
   raise SyntaxError("unexpected token: " + str(tok))
 
@@ -145,11 +143,11 @@ functions = {
 
 # Evaluator
 def eval_node(node, variables):
-  if node.type == NodeType.NUMBER:
+  if node.type == NUMBER:
     return node.value
-  elif node.type == NodeType.VARIABLE:
+  elif node.type == VARIABLE:
     return variables[node.value]
-  elif node.type == NodeType.EXPR:
+  elif node.type == EXPR:
     (op, left, right) = node.value
     left = eval_node(left, variables)
     right = eval_node(right, variables)
@@ -165,7 +163,7 @@ def eval_node(node, variables):
       return left ** right
     else:
       raise SyntaxError("unknown operator: " + op)
-  elif node.type == NodeType.CALL:
+  elif node.type == CALL:
     (fn_name, params) = node.value
     if fn_name in functions:
       return functions[fn_name]([eval_node(param, variables) for param in params])
