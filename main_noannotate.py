@@ -179,7 +179,8 @@ src = input("Enter an equation (must be in parenthesis): ")
 # Graph
 import pygame
 pygame.init()
-font = pygame.font.Font(pygame.font.get_default_font(), 12)
+font = pygame.freetype.Font(input("font: "), 12)
+font.fgcolor = (0, 0, 0)
 
 WIDTH = 800
 HEIGHT = 800
@@ -231,8 +232,9 @@ def draw():
     y = 0
     (x, y) = coord_to_screen(x, y)
     pygame.draw.line(win, (0, 0, 0), (x, y - offamount), (x, y + offamount), width=1)
-    text = font.render(str(int(i)), True, (0, 0, 0))
-    win.blit(text, (x - text.get_width() / 2, offy - offamount * 2 - 10))
+    txt = str(int(i))
+    rect = font.get_rect(txt)
+    font.render_to(win, (x - rect.width / 2, offy - offamount * 2 - 10), txt) # get_width instead of 12
 
   # Y-Axis
   numticks = int(HEIGHT / scale)
@@ -245,8 +247,9 @@ def draw():
     y = i
     (x, y) = coord_to_screen(x, y)
     pygame.draw.line(win, (0, 0, 0), (x - offamount, y), (x + offamount, y), width=1)
-    text = font.render(str(int(i)), True, (0, 0, 0))
-    win.blit(text, (offx - offamount * 2 - 10, y - text.get_height() / 2))
+    txt = str(int(i))
+    rect = font.get_rect(txt)
+    font.render_to(win, (offx - offamount * 2 - 10, y - rect.height / 2), txt) # get_height instead of 12
 
   # Draw function
   prevxv = 0
