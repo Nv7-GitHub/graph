@@ -147,6 +147,7 @@ functions: dict[str, Callable[[list[float]], float]] = {
   "sin": lambda inp: math.sin(inp[0]),
   "cos": lambda inp: math.cos(inp[0]),
   "tan": lambda inp: math.tan(inp[0]),
+  "fact": lambda inp: math.gamma(inp[0]) * inp[0],
 }
 
 # Evaluator
@@ -264,7 +265,7 @@ def draw():
     xv = screenx_to_coord(x)
     try:
       yv = eval_node(eq, {"x": xv})
-    except ZeroDivisionError:
+    except (ZeroDivisionError, ValueError):
       noprev = True
       continue
     
@@ -292,23 +293,29 @@ while running:
   keys = pygame.key.get_pressed()
   changed = False
 
+  speed = 3
+  speedscale = 1.01
+  if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
+    speed = 6
+    speedscale = 1.1
+
   if keys[pygame.K_LEFT]:
-    offx += 3
+    offx += speed
     changed = True
   if keys[pygame.K_RIGHT]:
-    offx -= 3
+    offx -= speed
     changed = True
   if keys[pygame.K_UP]:
-    offy += 3
+    offy += speed
     changed = True
   if keys[pygame.K_DOWN]:
-    offy -= 3
+    offy -= speed
     changed = True
   if keys[pygame.K_EQUALS]: # Plus
-    scale *= 1.01
+    scale *= speedscale
     changed = True
   if keys[pygame.K_MINUS]: # Minus
-    scale /= 1.01
+    scale /= speedscale
     changed = True
 
   # Shortcuts
@@ -317,6 +324,7 @@ while running:
     scale = WIDTH / 20
     offx = WIDTH / 2
     offy = HEIGHT / 2
+    draw()
   
   if changed:
     draw()
