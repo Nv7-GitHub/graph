@@ -20,7 +20,7 @@ class Token:
     self.type = type
     self.value = value
   
-  def __repr__(self) -> str:
+  def __repr__(self):
     return f"Token({self.type}, {self.value})"
 
 def tokenize(code: str):
@@ -100,7 +100,7 @@ class Node:
     self.type = type
     self.value = value
 
-  def __repr__(self) -> str:
+  def __repr__(self):
     return f"Node({self.type}, {self.value})"
 
 def parse(tokens):
