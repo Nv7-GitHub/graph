@@ -188,6 +188,7 @@ src = input("Enter an equation (must be in parenthesis): ")
 # Graph
 import pygame
 pygame.init()
+#Update font, i.e, roboto-light.ttf
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 WIDTH = 800
