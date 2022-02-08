@@ -1,10 +1,8 @@
 import math
 
-
 # Tokenizer
 letters = set(list("abcdefghijklmnopqrstuvwxyz"))
 numbers = set(list("0123456789."))
-
 
 LPAREN = 1
 RPAREN = 2
