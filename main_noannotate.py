@@ -1,3 +1,4 @@
+
 import math
 
 # Tokenizer
@@ -176,6 +177,7 @@ src = input("Enter an equation (must be in parenthesis): ")
 
 # Graph
 import pygame
+import pygame.freetype
 pygame.init()
 font = pygame.freetype.Font(input("font: "), 12)
 font.fgcolor = (0, 0, 0)
@@ -183,7 +185,6 @@ font.fgcolor = (0, 0, 0)
 WIDTH = 800
 HEIGHT = 800
 win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Graph')
 
 scale = WIDTH / 20 # Scale so that its 20 units wide (-10, -10)
 offx = WIDTH / 2 # Centered
@@ -225,7 +226,7 @@ def draw():
   if incr < 1:
     incr = 1
   left = math.ceil(screenx_to_coord(0))
-  for i in range(left, left + numticks + 1, incr):
+  for i in range(int(left), int(left + numticks + 1), int(incr)):
     x = i
     y = 0
     (x, y) = coord_to_screen(x, y)
@@ -240,7 +241,7 @@ def draw():
   if incr < 1:
     incr = 1
   top = math.floor(screeny_to_coord(HEIGHT))
-  for i in range(top, top + numticks + 1, incr):
+  for i in range(int(top), int(top + numticks + 1), int(incr)):
     x = 0
     y = i
     (x, y) = coord_to_screen(x, y)
@@ -272,7 +273,7 @@ def draw():
       prevxv = xv
       prevyv = yv
 
-  pygame.display.update()
+  pygame.display.flip()
 
 # Main loop
 running = True
@@ -320,4 +321,3 @@ while running:
   
   if changed:
     draw()
-
